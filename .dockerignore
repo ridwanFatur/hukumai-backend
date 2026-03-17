@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+..pytest_cache/
+.vscode/
+.git
+.gitignore
+*.http
+.env
+Note.txt
+Dockerfile
+docker-compose.yml
+app.db
+commands/
+service_account.json

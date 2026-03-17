@@ -1,0 +1,12 @@
+.env
+app.db
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+..pytest_cache/
+.vscode/
+.venv/
+docker-compose.yml
+commands/
+service_account.json
