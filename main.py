@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import logging
 from fastapi.middleware.cors import CORSMiddleware
 
-from api import auth
+from api import auth, user
 from utils.config import CORS_ORIGINS
 
 app = FastAPI(
@@ -29,3 +29,4 @@ async def root():
     return {"message": "App is Ready"}
 
 app.include_router(auth.router)
+app.include_router(user.router)
