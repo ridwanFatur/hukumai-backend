@@ -14,3 +14,4 @@ docker-compose.yml
 app.db
 commands/
 service_account.json
+.venv
