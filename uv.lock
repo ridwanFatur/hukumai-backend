@@ -214,6 +214,7 @@ dependencies = [
     { name = "alembic" },
     { name = "crewai" },
     { name = "fastapi" },
+    { name = "langdetect" },
     { name = "psycopg2-binary" },
     { name = "pyjwt" },
     { name = "requests" },
@@ -225,6 +226,7 @@ requires-dist = [
     { name = "alembic", specifier = ">=1.18.4" },
     { name = "crewai", specifier = ">=1.11.0" },
     { name = "fastapi", specifier = ">=0.135.1" },
+    { name = "langdetect", specifier = ">=1.0.9" },
     { name = "psycopg2-binary", specifier = ">=2.9.11" },
     { name = "pyjwt", specifier = ">=2.12.1" },
     { name = "requests", specifier = ">=2.32.5" },
@@ -1372,6 +1374,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/fd/fc/5a4547a140b820d19e282005a4b1fea025ac39f3f284231e8e226cc90e48/lancedb-0.30.1-cp39-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:2eaebfa5add91c0185be4baa0c1a714877e203340a116102b12ad5e60bf36209", size = 43883183, upload-time = "2026-03-20T01:00:11.763Z" },
     { url = "https://files.pythonhosted.org/packages/c4/f0/04895c6dc7b9fb797fb9243aa9e9aede54d1eef307bdf9562bbc0b4be5d7/lancedb-0.30.1-cp39-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:7beb23b096b7798f65aac6203deab0e4b4c9d541050f17bc38312e6cf143fafd", size = 46942257, upload-time = "2026-03-20T01:02:58.912Z" },
 ]
+
+[[package]]
+name = "langdetect"
+version = "1.0.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0e/72/a3add0e4eec4eb9e2569554f7c70f4a3c27712f40e3284d483e88094cc0e/langdetect-1.0.9.tar.gz", hash = "sha256:cbc1fef89f8d062739774bd51eda3da3274006b3661d199c2655f6b3f6d605a0", size = 981474, upload-time = "2021-05-07T07:54:13.562Z" }
 
 [[package]]
 name = "linkify-it-py"

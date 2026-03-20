@@ -2,6 +2,7 @@ import json
 
 from fastapi import BackgroundTasks, HTTPException
 from sqlalchemy.orm import Session
+from ai_services import generate_title
 from db.database import SessionLocal
 from models.chat_message import ChatMessage
 from models.chat_session import ChatSession
@@ -9,11 +10,11 @@ import time
 from utils.connection_manager import ws_manager
 import asyncio
 
+
 def generate_title_background(user_id: int, session_id: int, prompt: str):
     db = SessionLocal()
     try:
-        time.sleep(5)
-        generated_title = f"Generated title for '{prompt[:20]}...'"
+        generated_title = generate_title.generate_title(prompt)
         chat_session = db.query(ChatSession).filter(ChatSession.id == session_id).first()
         if chat_session:
             chat_session.title = generated_title
