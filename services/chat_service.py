@@ -3,6 +3,7 @@ import json
 from fastapi import BackgroundTasks, HTTPException
 from sqlalchemy.orm import Session
 from ai_services import generate_title
+from ai_services.crewai_analysis import CrewaiAnalysisFlow
 from db.database import SessionLocal
 from models.chat_message import ChatMessage
 from models.chat_session import ChatSession
@@ -65,19 +66,7 @@ def handle_send_message(
         user_id
     )
     return message
-    
-def update_thinking_text(session_id: int, user_id: int, message: str):
-	payload = {
-		"action": "update_thinking",
-		"session_id": session_id,
-		"text": message
-	}
-	if ws_manager.loop:
-		asyncio.run_coroutine_threadsafe(
-			ws_manager.send_to_user(user_id, json.dumps(payload)),
-			ws_manager.loop
-		)  
-                             
+    	                  
 def generate_ai_response(session_id: int, user_message: str, user_id: int):
     db = SessionLocal()
     try:
@@ -86,19 +75,46 @@ def generate_ai_response(session_id: int, user_message: str, user_id: int):
         if not session:
             return
         
-        time.sleep(5)
-        update_thinking_text(session_id, user_id, "Test 1")
+        def update_thinking_text(message: str):
+            payload = {
+				"action": "update_thinking",
+				"session_id": session_id,
+				"text": message
+			}
+            if ws_manager.loop:
+                asyncio.run_coroutine_threadsafe(
+					ws_manager.send_to_user(user_id, json.dumps(payload)),
+					ws_manager.loop
+				)  
+           
+        crew_flow = CrewaiAnalysisFlow(update_fn=update_thinking_text)
+        ai_response = crew_flow.kickoff(inputs={"user_query": user_message})
         
-        time.sleep(5)
-        update_thinking_text(session_id, user_id, "Test 2")
+        message = ChatMessage(
+            session_id=session.id,
+            role="assistant",
+            content=ai_response
+        )
+        db.add(message)
+        session.is_thinking = False
         
-        time.sleep(5)
-        update_thinking_text(session_id, user_id, "Test 3")
+        db.commit()
+        db.refresh(message)
         
-        time.sleep(5)
-        update_thinking_text(session_id, user_id, "Test 4")
-        
-        ai_response = f"Response for: {user_message}"
+        # Notify
+        payload = {
+				"action": "update_message",
+				"session_id": session_id,
+				"message": ai_response,
+				"message_id": message.id,
+			}
+        if ws_manager.loop:
+            asyncio.run_coroutine_threadsafe(
+				ws_manager.send_to_user(user_id, json.dumps(payload)),
+				ws_manager.loop
+			)
+    except Exception as e:
+        ai_response = "Something went wrong"
         message = ChatMessage(
             session_id=session.id,
             role="assistant",
