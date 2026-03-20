@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from models.user import User
 from models.user_token import UserToken
 from utils.email_utils import is_valid_email
-
+from models.chat_session import ChatSession
 
 def get_or_create_user(db: Session, email: str, name: str):
     user = db.query(User).filter(User.email == email).first()

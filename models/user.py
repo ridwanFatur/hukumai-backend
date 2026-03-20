@@ -14,3 +14,4 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     tokens = relationship("UserToken", back_populates="user", uselist=False)
+    sessions = relationship("ChatSession", back_populates="user")

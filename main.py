@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api import auth, user
 from utils.config import CORS_ORIGINS
+from models import *
 
 app = FastAPI(
 	title="Hukum AI",

@@ -7,8 +7,7 @@ from alembic import context
 from db.database import Base
 
 # Register Model in here
-from models.user import User
-from models.user_token import UserToken
+from models import *
 from utils.config import POSTGRES_DB, POSTGRES_HOST, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_USER
 
 config = context.config
