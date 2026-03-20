@@ -70,7 +70,6 @@ def handle_send_message(
 def generate_ai_response(session_id: int, user_message: str, user_id: int):
     db = SessionLocal()
     try:
-        time.sleep(5)
         session = db.query(ChatSession).filter(ChatSession.id == session_id).first()
         if not session:
             return
