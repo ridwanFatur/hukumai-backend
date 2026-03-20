@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 from fastapi import Query
 from datetime import datetime
-
+from sqlalchemy import desc
 from services.chat_service import generate_title_background
 
 router = APIRouter(
@@ -57,7 +57,7 @@ async def create_chat_session(
     db.add(new_session)
     db.commit()
     db.refresh(new_session)
-    background_tasks.add_task(generate_title_background, new_session.id, session_in.prompt, db)
+    background_tasks.add_task(generate_title_background, user.id, new_session.id, session_in.prompt, db)
 
     return new_session
 
@@ -73,5 +73,5 @@ async def get_chat_sessions(
     if title:
         query = query.filter(ChatSession.title.ilike(f"%{title}%")) 
 
-    sessions = query.limit(30).all()
+    sessions = query.order_by(desc(ChatSession.created_at)).limit(30).all()
     return sessions
