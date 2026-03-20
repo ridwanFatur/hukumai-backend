@@ -1,9 +1,8 @@
 from fastapi import APIRouter, BackgroundTasks, Depends, Request
 from dependencies.auth_middleware import get_current_user
-from fastapi import APIRouter, Depends, Request, HTTPException, status
+from fastapi import APIRouter, Depends, Request, HTTPException
 from sqlalchemy.orm import Session
 from db.database import get_db
-from models.chat_message import ChatMessage
 from models.chat_session import ChatSession
 from models.user import User
 from pydantic import BaseModel
@@ -11,7 +10,7 @@ from typing import List, Optional
 from fastapi import Query
 from datetime import datetime
 from sqlalchemy import desc
-from services.chat_service import generate_ai_response, generate_title_background, handle_send_message
+from services.chat_service import generate_title_background, handle_send_message
 
 router = APIRouter(
     prefix="/api/chat-session",
