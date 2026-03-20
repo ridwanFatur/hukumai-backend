@@ -65,7 +65,18 @@ def handle_send_message(
     )
     return message
     
-                         
+def update_thinking_text(session_id: int, user_id: int, message: str):
+	payload = {
+		"action": "update_thinking",
+		"session_id": session_id,
+		"text": message
+	}
+	if ws_manager.loop:
+		asyncio.run_coroutine_threadsafe(
+			ws_manager.send_to_user(user_id, json.dumps(payload)),
+			ws_manager.loop
+		)  
+                             
 def generate_ai_response(session_id: int, user_message: str, user_id: int):
     db = SessionLocal()
     try:
@@ -73,6 +84,19 @@ def generate_ai_response(session_id: int, user_message: str, user_id: int):
         session = db.query(ChatSession).filter(ChatSession.id == session_id).first()
         if not session:
             return
+        
+        time.sleep(5)
+        update_thinking_text(session_id, user_id, "Test 1")
+        
+        time.sleep(5)
+        update_thinking_text(session_id, user_id, "Test 2")
+        
+        time.sleep(5)
+        update_thinking_text(session_id, user_id, "Test 3")
+        
+        time.sleep(5)
+        update_thinking_text(session_id, user_id, "Test 4")
+        
         ai_response = f"Response for: {user_message}"
         message = ChatMessage(
             session_id=session.id,
