@@ -60,3 +60,18 @@ async def create_chat_session(
     background_tasks.add_task(generate_title_background, new_session.id, session_in.prompt, db)
 
     return new_session
+
+@router.get("/", response_model=List[ChatSessionOut])
+async def get_chat_sessions(
+    request: Request, 
+    db: Session = Depends(get_db),
+    title: Optional[str] = Query(None)
+):
+    user: User = request.state.user
+    query = db.query(ChatSession).filter(ChatSession.user_id == user.id)
+
+    if title:
+        query = query.filter(ChatSession.title.ilike(f"%{title}%")) 
+
+    sessions = query.limit(30).all()
+    return sessions
