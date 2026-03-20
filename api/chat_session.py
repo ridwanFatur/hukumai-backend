@@ -58,6 +58,7 @@ async def create_chat_session(
     db.add(new_session)
     db.commit()
     db.refresh(new_session)
+    background_tasks.add_task(generate_title_background, user.id, new_session.id, session_in.prompt)
     handle_send_message(
         db,
         new_session,
@@ -65,8 +66,6 @@ async def create_chat_session(
         background_tasks,
         user_id=user.id
     )
-    
-    background_tasks.add_task(generate_title_background, user.id, new_session.id, session_in.prompt)
 
     return new_session
 
