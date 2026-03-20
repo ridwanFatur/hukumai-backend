@@ -71,6 +71,8 @@ jobs:
             docker-compose stop api-hukumai
             docker-compose rm -f api-hukumai
             docker-compose up -d api-hukumai
+            
+            docker-compose rm -f db-hukumai-migration
             docker-compose up db-hukumai-migration
           EOF
 
