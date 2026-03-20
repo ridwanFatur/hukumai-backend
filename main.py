@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import logging
 from fastapi.middleware.cors import CORSMiddleware
 
-from api import auth, user
+from api import auth, chat_session, user
 from utils.config import CORS_ORIGINS
 from models import *
 
@@ -31,3 +31,4 @@ async def root():
 
 app.include_router(auth.router)
 app.include_router(user.router)
+app.include_router(chat_session.router)
