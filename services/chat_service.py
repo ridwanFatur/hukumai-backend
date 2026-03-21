@@ -8,6 +8,7 @@ from db.database import SessionLocal
 from models.chat_message import ChatMessage
 from models.chat_session import ChatSession
 import time
+from services.user_token_service import deduct_tokens
 from utils.connection_manager import ws_manager
 import asyncio
 
@@ -58,6 +59,9 @@ def handle_send_message(
     db.add(message)
     db.commit()
     db.refresh(message)
+    
+    # Reduce user token
+    deduct_tokens(db, user_id)
     
     background_tasks.add_task(
         generate_ai_response,

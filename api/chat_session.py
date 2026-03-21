@@ -11,6 +11,7 @@ from fastapi import Query
 from datetime import datetime
 from sqlalchemy import desc
 from services.chat_service import generate_title_background, handle_send_message
+from services.user_token_service import check_tokens
 
 router = APIRouter(
     prefix="/api/chat-session",
@@ -50,6 +51,9 @@ async def create_chat_session(
     db: Session = Depends(get_db)
 ):
     user: User = request.state.user
+    # Check user token
+    check_tokens(db, user.id)
+    
     new_session = ChatSession(
         user_id=user.id,
         title="New Chat"
@@ -95,6 +99,10 @@ async def send_message(
     db: Session = Depends(get_db)
 ):
     user: User = request.state.user
+    
+    # Check user token
+    check_tokens(db, user.id)
+    
     session = db.query(ChatSession).filter(
         ChatSession.id == payload.session_id,
         ChatSession.user_id == user.id
