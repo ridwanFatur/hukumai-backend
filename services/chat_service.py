@@ -50,6 +50,9 @@ def handle_send_message(
     # set thinking
     session.is_thinking = True
     db.commit()  
+    
+    # Reduce user token
+    deduct_tokens(db, user_id)
      
     message = ChatMessage(
         session_id=session.id,
@@ -59,9 +62,6 @@ def handle_send_message(
     db.add(message)
     db.commit()
     db.refresh(message)
-    
-    # Reduce user token
-    deduct_tokens(db, user_id)
     
     background_tasks.add_task(
         generate_ai_response,
